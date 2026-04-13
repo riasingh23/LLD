@@ -11,13 +11,15 @@ import com.carparkinglot.entities.payment.PaymentMethod;
 
 public class ExitGate implements Gate{
     private final String gateId;
-    ParkingSpotManagerFactory parkingSpotManagerFactory;
-    CostCalculatorFactory costCalculatorFactory;
+    private final ParkingSpotManagerFactory parkingSpotManagerFactory;
+    private final CostCalculatorFactory costCalculatorFactory;
+    private final PaymentFactory paymentFactory;
 
-    public ExitGate(String gateId, ParkingSpotManagerFactory parkingSpotManagerFactory, CostCalculatorFactory costCalculatorFactory) {
+    public ExitGate(String gateId, ParkingSpotManagerFactory parkingSpotManagerFactory, CostCalculatorFactory costCalculatorFactory, PaymentFactory paymentFactory) {
         this.gateId = gateId;
         this.parkingSpotManagerFactory = parkingSpotManagerFactory;
         this.costCalculatorFactory = costCalculatorFactory;
+        this.paymentFactory = paymentFactory;
     }
 
     public void exitProcess(Ticket ticket, PaymentMethod paymentMethod) {
@@ -29,7 +31,7 @@ public class ExitGate implements Gate{
     }
 
     private void makePayment (int amount, PaymentMethod paymentMethod) {
-        PaymentStrategy paymentStrategy = PaymentFactory.getPayment(paymentMethod);
+        PaymentStrategy paymentStrategy = paymentFactory.getPayment(paymentMethod);
         paymentStrategy.pay(amount);
     }
 

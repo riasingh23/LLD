@@ -11,7 +11,7 @@ import com.carparkinglot.entities.parkingspot.BikeParkingSpot;
 import com.carparkinglot.entities.parkingspot.CarParkingSpot;
 import com.carparkinglot.entities.parkingspot.ParkingSpot;
 import com.carparkinglot.entities.parkingspotmanager.ParkingSpotManagerFactory;
-import com.carparkinglot.entities.payment.PaymentMethod;
+import com.carparkinglot.entities.payment.*;
 import com.carparkinglot.entities.vehicle.Vehicle;
 import com.carparkinglot.enums.VehicleType;
 import java.util.ArrayList;
@@ -37,8 +37,14 @@ public class CarParkingLotSystem {
         costCalculatorMap.put(VehicleType.CAR, new CarCostCalculator());
         costCalculatorMap.put(VehicleType.BIKE, new BikeCostCalculator());
         CostCalculatorFactory costCalculatorFactory = new CostCalculatorFactory(costCalculatorMap);
+
+        Map<PaymentMethod, PaymentStrategy> paymentMethodPaymentStrategyMap = new HashMap<>();
+        paymentMethodPaymentStrategyMap.put(PaymentMethod.CARD, new CardPaymentStrategy());
+        paymentMethodPaymentStrategyMap.put(PaymentMethod.CASH, new CashPaymentStrategy());
+        PaymentFactory paymentFactory = new PaymentFactory(paymentMethodPaymentStrategyMap);
+
         EntryGate entryGate = new EntryGate("Entry Gate", parkingSpotManagerFactory);
-        ExitGate exitGate = new ExitGate("Exit Gate", parkingSpotManagerFactory, costCalculatorFactory);
+        ExitGate exitGate = new ExitGate("Exit Gate", parkingSpotManagerFactory, costCalculatorFactory, paymentFactory);
 
         Vehicle car1 = new Vehicle("KA877J356", VehicleType.CAR);
         Vehicle car2= new Vehicle("KA877J357", VehicleType.CAR);
