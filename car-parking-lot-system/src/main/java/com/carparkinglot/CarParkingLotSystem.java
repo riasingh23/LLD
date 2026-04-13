@@ -10,12 +10,10 @@ import com.carparkinglot.entities.gate.ExitGate;
 import com.carparkinglot.entities.parkingspot.BikeParkingSpot;
 import com.carparkinglot.entities.parkingspot.CarParkingSpot;
 import com.carparkinglot.entities.parkingspot.ParkingSpot;
-
 import com.carparkinglot.entities.parkingspotmanager.ParkingSpotManagerFactory;
 import com.carparkinglot.entities.payment.PaymentMethod;
 import com.carparkinglot.entities.vehicle.Vehicle;
 import com.carparkinglot.enums.VehicleType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

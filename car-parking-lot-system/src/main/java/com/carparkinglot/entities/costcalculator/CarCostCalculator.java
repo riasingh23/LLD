@@ -5,6 +5,6 @@ import com.carparkinglot.entities.pricingstrategy.MinuteBasedPricingStrategy;
 public class CarCostCalculator extends CostCalculator{
 
     public CarCostCalculator() {
-        super(new MinuteBasedPricingStrategy());
+        super(new MinuteBasedPricingStrategy(20));
     }
 }
