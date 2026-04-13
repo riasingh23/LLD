@@ -10,6 +10,7 @@ import java.util.Map;
 
 public abstract class ParkingSpotManager {
     private final List<ParkingSpot> parkingSpotList;
+    private List<ParkingSpot> availableParkingSpotList;
     private Map<String,ParkingSpot> allocatedparkingSpotList;
     private final ParkingStrategy parkingStrategy;
 
@@ -17,10 +18,11 @@ public abstract class ParkingSpotManager {
         this.parkingSpotList = parkingSpotList;
         this.parkingStrategy = parkingStrategy;
         this.allocatedparkingSpotList = new HashMap<>();
+        this.availableParkingSpotList = parkingSpotList;
     }
 
     public ParkingSpot findParkingSpot () {
-        return parkingStrategy.findingParkingSpot(parkingSpotList);
+        return parkingStrategy.findingParkingSpot(availableParkingSpotList);
     }
 
     public ParkingSpot parkVehicle(Vehicle vehicle) {
@@ -28,6 +30,7 @@ public abstract class ParkingSpotManager {
         if(parkingSpot!=null){
             parkingSpot.parkVehicle(vehicle);
             allocatedparkingSpotList.put(vehicle.getRegistrationNumber(), parkingSpot);
+            availableParkingSpotList.remove(parkingSpot);
         }
         return parkingSpot;
     }
@@ -35,6 +38,7 @@ public abstract class ParkingSpotManager {
     public void removeVehicle(Vehicle vehicle) {
         ParkingSpot parkingSpot = allocatedparkingSpotList.get(vehicle.getRegistrationNumber());
         allocatedparkingSpotList.remove(vehicle.getRegistrationNumber());
+        availableParkingSpotList.add(parkingSpot);
         parkingSpot.removeVehicle();
     }
 }

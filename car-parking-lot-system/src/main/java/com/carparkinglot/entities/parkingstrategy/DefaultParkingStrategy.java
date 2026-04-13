@@ -7,12 +7,7 @@ import java.util.List;
 public class DefaultParkingStrategy implements ParkingStrategy{
 
     @Override
-    public ParkingSpot findingParkingSpot(List<ParkingSpot> parkingSpotList) {
-        for(ParkingSpot parkingSpot:parkingSpotList) {
-            if(!parkingSpot.isBooked()) {
-                return parkingSpot;
-            }
-        }
-        return null;
+    public ParkingSpot findingParkingSpot(List<ParkingSpot> availableParkingSpotList) {
+        return availableParkingSpotList.iterator().next();
     }
 }
