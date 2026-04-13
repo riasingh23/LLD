@@ -1,6 +1,9 @@
 package com.carparkinglot;
 
 import com.carparkinglot.entities.Ticket;
+import com.carparkinglot.entities.costcalculator.BikeCostCalculator;
+import com.carparkinglot.entities.costcalculator.CarCostCalculator;
+import com.carparkinglot.entities.costcalculator.CostCalculator;
 import com.carparkinglot.entities.costcalculator.CostCalculatorFactory;
 import com.carparkinglot.entities.gate.EntryGate;
 import com.carparkinglot.entities.gate.ExitGate;
@@ -14,7 +17,9 @@ import com.carparkinglot.entities.vehicle.Vehicle;
 import com.carparkinglot.enums.VehicleType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CarParkingLotSystem {
     public static void main(String[] args) throws IllegalAccessException {
@@ -30,7 +35,10 @@ public class CarParkingLotSystem {
         }
 
         ParkingSpotManagerFactory parkingSpotManagerFactory = new ParkingSpotManagerFactory(carParkingSpotList, bikeParkingSpotList);
-        CostCalculatorFactory costCalculatorFactory = new CostCalculatorFactory();
+        Map<VehicleType, CostCalculator> costCalculatorMap = new HashMap<>();
+        costCalculatorMap.put(VehicleType.CAR, new CarCostCalculator());
+        costCalculatorMap.put(VehicleType.BIKE, new BikeCostCalculator());
+        CostCalculatorFactory costCalculatorFactory = new CostCalculatorFactory(costCalculatorMap);
         EntryGate entryGate = new EntryGate("Entry Gate", parkingSpotManagerFactory);
         ExitGate exitGate = new ExitGate("Exit Gate", parkingSpotManagerFactory, costCalculatorFactory);
 
