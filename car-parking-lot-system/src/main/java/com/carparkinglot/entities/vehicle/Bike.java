@@ -13,4 +13,9 @@ public class Bike implements Vehicle {
     public VehicleType getVehicleType() {
         return VehicleType.BIKE;
     }
+
+    @Override
+    public String getRegistrationNumber() {
+        return this.registrationNumber;
+    }
 }

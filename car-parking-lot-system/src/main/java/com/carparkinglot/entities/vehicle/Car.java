@@ -13,4 +13,9 @@ public class Car implements Vehicle {
     public VehicleType getVehicleType() {
         return VehicleType.CAR;
     }
+
+    @Override
+    public String getRegistrationNumber() {
+        return this.registrationNumber;
+    }
 }
