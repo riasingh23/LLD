@@ -66,7 +66,7 @@
     - Create Address
     - Create Gate - Exit Gate, Entry Gate
     - Making Parking Area object using Address. Adding Parking slots to Parking area
-    - Create the payment system object
+    - Create the paymentStrategy system object
 - Intiate Ticket object
 - Create Users object
     - Create Vehicle object inside User object

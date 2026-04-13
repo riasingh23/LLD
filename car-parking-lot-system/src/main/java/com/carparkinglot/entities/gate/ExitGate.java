@@ -5,7 +5,7 @@ import com.carparkinglot.entities.costcalculator.CostCalculator;
 import com.carparkinglot.entities.costcalculator.CostCalculatorFactory;
 import com.carparkinglot.entities.parkingspotmanager.ParkingSpotManager;
 import com.carparkinglot.entities.parkingspotmanager.ParkingSpotManagerFactory;
-import com.carparkinglot.entities.payment.Payment;
+import com.carparkinglot.entities.payment.PaymentStrategy;
 import com.carparkinglot.entities.payment.PaymentFactory;
 import com.carparkinglot.entities.payment.PaymentMethod;
 
@@ -29,8 +29,8 @@ public class ExitGate implements Gate{
     }
 
     private void makePayment (int amount, PaymentMethod paymentMethod) {
-        Payment payment = PaymentFactory.getPayment(paymentMethod);
-        payment.pay(amount);
+        PaymentStrategy paymentStrategy = PaymentFactory.getPayment(paymentMethod);
+        paymentStrategy.pay(amount);
     }
 
     private void unparkVehicle (Ticket ticket) {

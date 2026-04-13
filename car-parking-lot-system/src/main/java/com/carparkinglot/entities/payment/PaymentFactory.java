@@ -1,10 +1,10 @@
 package com.carparkinglot.entities.payment;
 
 public class PaymentFactory {
-    public static Payment getPayment(PaymentMethod paymentMethod) {
+    public static PaymentStrategy getPayment(PaymentMethod paymentMethod) {
         return switch (paymentMethod) {
-            case CASH -> new CashPayment();
-            case CARD -> new CardPayment();
+            case CASH -> new CashPaymentStrategy();
+            case CARD -> new CardPaymentStrategy();
             default -> throw new IllegalArgumentException("Unsupported vehicle type: " + paymentMethod);
         };
     }
