@@ -27,14 +27,15 @@ public class Game {
 
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
-            Pair<Integer, Integer> move = currPlayer.makeMove(board);
-            board.updateMoveOnBoard(move.getFirst(), move.getSecond(), currPlayer.getPiece());
-            if(board.checkWinner(move.getFirst(), move.getSecond(), currPlayer.getPiece())) {
+            Move move = currPlayer.makeMove(board);
+            board.updateMoveOnBoard(move.getRow(), move.getColumn(), currPlayer.getPiece());
+            if(board.checkWinner(move.getRow(), move.getColumn(), currPlayer.getPiece())) {
                 winner = currPlayer;
                 gameStatus = GameStatus.WIN;
                 break;
             }
             else if(board.isBoardFull()) {
+                gameStatus = GameStatus.DRAW;
                 break;
             }
             displayGame();

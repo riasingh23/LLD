@@ -1,6 +1,6 @@
 package com.tictactoe.entity;
 
-import com.tictactoe.Pair;
+import com.tictactoe.Move;
 import com.tictactoe.enums.Piece;
 import com.tictactoe.strategy.MoveStrategy;
 
@@ -23,7 +23,7 @@ public abstract class Player {
         return piece;
     }
 
-    public Pair<Integer, Integer> makeMove(Board board) {
+    public Move makeMove(Board board) {
         return moveStrategy.makeMove(board);
     }
 }
