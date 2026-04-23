@@ -1,11 +1,7 @@
 package com.tictactoe.entity;
 
 import com.tictactoe.enums.Piece;
-import com.tictactoe.Pair;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Board {
