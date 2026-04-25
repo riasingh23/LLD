@@ -24,6 +24,8 @@ public abstract class Player {
     }
 
     public Move makeMove(Board board) {
-        return moveStrategy.makeMove(board);
+        Move move = moveStrategy.makeMove(board);
+        board.updateMoveOnBoard(move.getRow(), move.getColumn(), piece);
+        return move;
     }
 }

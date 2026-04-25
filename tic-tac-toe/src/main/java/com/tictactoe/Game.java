@@ -3,8 +3,8 @@ package com.tictactoe;
 import com.tictactoe.entity.Board;
 import com.tictactoe.entity.Player;
 import com.tictactoe.enums.GameStatus;
-import com.tictactoe.strategy.MoveStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -13,10 +13,14 @@ public class Game {
     private Player currPlayer;
     private GameStatus gameStatus;
     private Player winner;
+    private List<Move> moves;
+    private GameRuleEngine gameRuleEngine;
 
-    public Game(Board board, List<Player> players) {
-        this.board = board;
+    public Game(List<Player> players, int n) {
+        this.board = new Board(n);
+        this.gameRuleEngine = new GameRuleEngine();
         this.players = players;
+        this.moves = new ArrayList<>();
         this.currPlayer = players.get(0);
         this.gameStatus = GameStatus.IN_PROGRESS;
     }
@@ -28,8 +32,8 @@ public class Game {
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
             Move move = currPlayer.makeMove(board);
-            board.updateMoveOnBoard(move.getRow(), move.getColumn(), currPlayer.getPiece());
-            if(board.checkWinner(move.getRow(), move.getColumn(), currPlayer.getPiece())) {
+            moves.add(move);
+            if(gameRuleEngine.updateMoveAndCheckWinner(move.getRow(), move.getColumn(), currPlayer.getPiece(), board.getN())) {
                 winner = currPlayer;
                 gameStatus = GameStatus.WIN;
                 break;

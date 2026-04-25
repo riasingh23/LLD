@@ -12,11 +12,11 @@ public class TicTacToeApp
     public static void main(String[] args) {
 
         System.out.println("Hello World!");
-        Board board = new Board(3);
+        int n=3;
         Player player1 = new Human("Ria", Piece.X);
         Player player2 = new Human("Rekha", Piece.O);
         List<Player> players = Arrays.asList(player1, player2);
-        Game game = new Game(board, players);
+        Game game = new Game(players, n);
         game.play();
     }
 }
