@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Game {
     private final Board board;
-    private GameStatus gameStatus;
+    private volatile GameStatus gameStatus;
     private Player winner;
     private List<Move> moves;
     private GameRuleEngine gameRuleEngine;
@@ -33,12 +33,16 @@ public class Game {
 
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
+            Player currPlayer;
             synchronized (lock) {
-                Player currPlayer = turnManager.getCurrentPlayer();
-                Move move = currPlayer.makeMove(board);
+                currPlayer = turnManager.getCurrentPlayer();
+            }
+
+            Move move = currPlayer.makeMove(board);
+            synchronized (lock) {
                 if (!board.validateMove(move)) {
                     gameObserverManager.notifyInvalidMove();
-                    move = currPlayer.makeMove(board);
+                    continue;
                 }
                 board.updateMoveOnBoard(move, currPlayer.getPiece());
                 gameObserverManager.notifyMove(move);
@@ -55,8 +59,8 @@ public class Game {
                 gameObserverManager.notifyDisplayGame(board);
                 turnManager.moveToNextPlayer();
             }
-            showWinner();
         }
+        showWinner();
     }
 
     public void showWinner() {
