@@ -1,6 +1,7 @@
 package com.tictactoe.entity;
 
 import com.tictactoe.GameRuleEngine;
+import com.tictactoe.Move;
 import com.tictactoe.enums.Piece;
 
 public class Board {
@@ -14,17 +15,23 @@ public class Board {
         this.totalMove = 0;
     }
 
-    public int getN() {
+    public int getSize() {
         return n;
     }
 
-    public void updateMoveOnBoard(int row, int col, Piece piece) {
-        if(row<0 || col<0 || row>=n || col>=n) {
-            throw new IndexOutOfBoundsException("Move is out of range " + n);
+    public boolean validateMove(Move move){
+        int row = move.getRow();
+        int col = move.getColumn();
+        if(row<0 || col<0 || row>=n || col>=n || board[row][col]!=null) {
+            return false;
         }
-        if(board[row][col]!=null) {
-            throw new IllegalArgumentException("The cell: " + row + ", " + col + "is already filled");
-        }
+        return true;
+    }
+
+    public void updateMoveOnBoard(Move move, Piece piece) {
+        int row = move.getRow();
+        int col = move.getColumn();
+
         board[row][col] = piece;
         totalMove++;
     }
@@ -38,16 +45,7 @@ public class Board {
     }
 
     public void printBoard (){
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++) {
-                if(board[i][j] == null) {
-                    System.out.print(" |");
-                } else {
-                    System.out.print(board[i][j].name()+"|");
-                }
-            }
-            System.out.println();
-        }
+
     }
 
 

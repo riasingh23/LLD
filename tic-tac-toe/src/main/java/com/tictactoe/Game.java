@@ -3,6 +3,9 @@ package com.tictactoe;
 import com.tictactoe.entity.Board;
 import com.tictactoe.entity.Player;
 import com.tictactoe.enums.GameStatus;
+import com.tictactoe.observer.ConsoleGameObserver;
+import com.tictactoe.observer.GameObserver;
+import com.tictactoe.observer.GameObserverManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +18,16 @@ public class Game {
     private Player winner;
     private List<Move> moves;
     private GameRuleEngine gameRuleEngine;
+    private GameObserverManager gameObserverManager;
 
-    public Game(List<Player> players, int n) {
+    public Game(List<Player> players, GameObserverManager gameObserverManager, int n) {
         this.board = new Board(n);
-        this.gameRuleEngine = new GameRuleEngine();
+        this.gameRuleEngine = new GameRuleEngine(n);
         this.players = players;
         this.moves = new ArrayList<>();
         this.currPlayer = players.get(0);
         this.gameStatus = GameStatus.IN_PROGRESS;
+        this.gameObserverManager = gameObserverManager;
     }
 
     public GameStatus getGameStatus() {
@@ -32,8 +37,15 @@ public class Game {
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
             Move move = currPlayer.makeMove(board);
+            if(!board.validateMove(move)){
+                gameObserverManager.notifyInvalidMove();
+                move = currPlayer.makeMove(board);
+            }
+            board.updateMoveOnBoard(move, currPlayer.getPiece());
+            gameObserverManager.notifyMove(move);
             moves.add(move);
-            if(gameRuleEngine.updateMoveAndCheckWinner(move.getRow(), move.getColumn(), currPlayer.getPiece(), board.getN())) {
+            boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
+            if(isWinner) {
                 winner = currPlayer;
                 gameStatus = GameStatus.WIN;
                 break;
@@ -42,14 +54,10 @@ public class Game {
                 gameStatus = GameStatus.DRAW;
                 break;
             }
-            displayGame();
+            gameObserverManager.notifyDisplayGame(board);
             currPlayer = nextPlayer();
         }
         showWinner();
-    }
-
-    public void displayGame () {
-        board.printBoard();
     }
 
     public Player nextPlayer() {
@@ -59,9 +67,9 @@ public class Game {
 
     public void showWinner() {
         if (GameStatus.WIN.equals(gameStatus)) {
-            System.out.println(gameStatus + ": " + winner.getName());
+            gameObserverManager.notifyWin(currPlayer.getName());
         } else if (GameStatus.DRAW.equals(gameStatus)) {
-            System.out.println(gameStatus);
+            gameObserverManager.notifyDraw();
         }
     }
 }
