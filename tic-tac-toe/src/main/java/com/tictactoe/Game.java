@@ -33,32 +33,26 @@ public class Game {
 
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
-            Player currPlayer;
-            synchronized (lock) {
-                currPlayer = turnManager.getCurrentPlayer();
-            }
-
+            Player currPlayer = turnManager.getCurrentPlayer();
             Move move = currPlayer.makeMove(board);
-            synchronized (lock) {
-                if (!board.validateMove(move)) {
-                    gameObserverManager.notifyInvalidMove();
-                    continue;
-                }
-                board.updateMoveOnBoard(move, currPlayer.getPiece());
-                gameObserverManager.notifyMove(move);
-                moves.add(move);
-                boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
-                if (isWinner) {
-                    winner = currPlayer;
-                    gameStatus = GameStatus.WIN;
-                    break;
-                } else if (board.isBoardFull()) {
-                    gameStatus = GameStatus.DRAW;
-                    break;
-                }
-                gameObserverManager.notifyDisplayGame(board);
-                turnManager.moveToNextPlayer();
+            if (!board.validateMove(move)) {
+                gameObserverManager.notifyInvalidMove();
+                continue;
             }
+            board.updateMoveOnBoard(move, currPlayer.getPiece());
+            gameObserverManager.notifyMove(move);
+            moves.add(move);
+            boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
+            if (isWinner) {
+                winner = currPlayer;
+                gameStatus = GameStatus.WIN;
+                break;
+            } else if (board.isBoardFull()) {
+                gameStatus = GameStatus.DRAW;
+                break;
+            }
+            gameObserverManager.notifyDisplayGame(board);
+            turnManager.moveToNextPlayer();
         }
         showWinner();
     }
