@@ -19,6 +19,7 @@ public class Game {
     private List<Move> moves;
     private GameRuleEngine gameRuleEngine;
     private GameObserverManager gameObserverManager;
+    private final Object lock = new Object();
 
     public Game(List<Player> players, GameObserverManager gameObserverManager, int n) {
         this.board = new Board(n);
@@ -36,28 +37,29 @@ public class Game {
 
     public void play() {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
-            Move move = currPlayer.makeMove(board);
-            if(!board.validateMove(move)){
-                gameObserverManager.notifyInvalidMove();
-                move = currPlayer.makeMove(board);
+            synchronized (lock) {
+                Move move = currPlayer.makeMove(board);
+                if (!board.validateMove(move)) {
+                    gameObserverManager.notifyInvalidMove();
+                    move = currPlayer.makeMove(board);
+                }
+                board.updateMoveOnBoard(move, currPlayer.getPiece());
+                gameObserverManager.notifyMove(move);
+                moves.add(move);
+                boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
+                if (isWinner) {
+                    winner = currPlayer;
+                    gameStatus = GameStatus.WIN;
+                    break;
+                } else if (board.isBoardFull()) {
+                    gameStatus = GameStatus.DRAW;
+                    break;
+                }
+                gameObserverManager.notifyDisplayGame(board);
+                currPlayer = nextPlayer();
             }
-            board.updateMoveOnBoard(move, currPlayer.getPiece());
-            gameObserverManager.notifyMove(move);
-            moves.add(move);
-            boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
-            if(isWinner) {
-                winner = currPlayer;
-                gameStatus = GameStatus.WIN;
-                break;
-            }
-            else if(board.isBoardFull()) {
-                gameStatus = GameStatus.DRAW;
-                break;
-            }
-            gameObserverManager.notifyDisplayGame(board);
-            currPlayer = nextPlayer();
+            showWinner();
         }
-        showWinner();
     }
 
     public Player nextPlayer() {
