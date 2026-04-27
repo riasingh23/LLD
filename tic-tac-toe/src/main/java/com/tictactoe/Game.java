@@ -34,18 +34,17 @@ public class Game {
             Player currPlayer = turnManager.getCurrentPlayer();
             Move move = currPlayer.makeMove(board);
             MoveResult result = board.makeMove(move, currPlayer.getPiece());
-            if(!result.isValid()) {
+            gameStatus = result.getGameStatus();
+            if(!result.isValidMove()) {
                 gameObserverManager.notifyInvalidMove();
                 continue;
             }
             gameObserverManager.notifyMove(move);
             moves.add(move);
-            if (result.isWinner()) {
+            if (GameStatus.WIN.equals(gameStatus)) {
                 winner = currPlayer;
-                gameStatus = GameStatus.WIN;
                 break;
-            } else if (result.isDraw()) {
-                gameStatus = GameStatus.DRAW;
+            } else if (GameStatus.DRAW.equals(gameStatus)) {
                 break;
             }
             gameObserverManager.notifyDisplayGame(board);

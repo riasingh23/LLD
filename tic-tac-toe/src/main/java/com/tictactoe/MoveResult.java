@@ -1,25 +1,20 @@
 package com.tictactoe;
 
+import com.tictactoe.enums.GameStatus;
+
 public class MoveResult {
-    private boolean winner;
+    private GameStatus gameStatus;
     private boolean valid;
-    private boolean draw;
-
-    public MoveResult(boolean winner, boolean valid, boolean draw) {
-        this.winner = winner;
+    public MoveResult(boolean valid, GameStatus gameStatus) {
         this.valid = valid;
-        this.draw = draw;
+        this.gameStatus = gameStatus;
     }
 
-    public boolean isWinner() {
-        return winner;
-    }
-
-    public boolean isValid() {
+    public boolean isValidMove() {
         return valid;
     }
 
-    public boolean isDraw() {
-        return draw;
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 }
