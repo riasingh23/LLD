@@ -2,17 +2,20 @@ package com.tictactoe.entity;
 
 import com.tictactoe.GameRuleEngine;
 import com.tictactoe.Move;
+import com.tictactoe.MoveResult;
 import com.tictactoe.enums.Piece;
 
 public class Board {
     private final Piece[][] board;
     private final int n;
     private int totalMove;
+    private GameRuleEngine gameRuleEngine;
 
     public Board(int n) {
         this.board = new Piece[n][n];
         this.n = n;
         this.totalMove = 0;
+        this.gameRuleEngine = new GameRuleEngine(n);
     }
 
     public int getSize() {
@@ -28,12 +31,18 @@ public class Board {
         return true;
     }
 
-    public void updateMoveOnBoard(Move move, Piece piece) {
+    public MoveResult makeMove(Move move, Piece piece) {
+        if(!validateMove(move)) {
+            return new MoveResult(false, false);
+        }
         int row = move.getRow();
         int col = move.getColumn();
 
         board[row][col] = piece;
         totalMove++;
+        if(gameRuleEngine.updateMoveAndCheckWinner(move, piece))
+            return new MoveResult(true, true);
+        return new MoveResult(false, true);
     }
 
     public Piece getPieceAtPosition(int i, int j){

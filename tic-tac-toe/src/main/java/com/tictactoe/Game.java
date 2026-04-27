@@ -13,14 +13,12 @@ public class Game {
     private volatile GameStatus gameStatus;
     private Player winner;
     private List<Move> moves;
-    private GameRuleEngine gameRuleEngine;
     private GameObserverManager gameObserverManager;
     private final Object lock = new Object();
     private TurnManager turnManager;
 
     public Game(List<Player> players, GameObserverManager gameObserverManager, int n) {
         this.board = new Board(n);
-        this.gameRuleEngine = new GameRuleEngine(n);
         this.turnManager = new TurnManager(players);
         this.moves = new ArrayList<>();
         this.gameStatus = GameStatus.IN_PROGRESS;
@@ -35,15 +33,14 @@ public class Game {
         while (GameStatus.IN_PROGRESS.equals(gameStatus)) {
             Player currPlayer = turnManager.getCurrentPlayer();
             Move move = currPlayer.makeMove(board);
-            if (!board.validateMove(move)) {
+            MoveResult result = board.makeMove(move, currPlayer.getPiece());
+            if(!result.isValid()) {
                 gameObserverManager.notifyInvalidMove();
                 continue;
             }
-            board.updateMoveOnBoard(move, currPlayer.getPiece());
             gameObserverManager.notifyMove(move);
             moves.add(move);
-            boolean isWinner = gameRuleEngine.updateMoveAndCheckWinner(move, currPlayer.getPiece());
-            if (isWinner) {
+            if (result.isWinner()) {
                 winner = currPlayer;
                 gameStatus = GameStatus.WIN;
                 break;
