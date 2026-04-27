@@ -5,6 +5,7 @@ import com.tictactoe.enums.Piece;
 import com.tictactoe.strategy.MoveStrategy;
 
 public abstract class Player {
+//    Bot, Human
     private String name;
     private Piece piece;
     private MoveStrategy moveStrategy;
