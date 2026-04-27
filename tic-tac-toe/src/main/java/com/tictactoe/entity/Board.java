@@ -22,7 +22,7 @@ public class Board {
         return n;
     }
 
-    public boolean validateMove(Move move){
+    private boolean validateMove(Move move){
         int row = move.getRow();
         int col = move.getColumn();
         if(row<0 || col<0 || row>=n || col>=n || board[row][col]!=null) {
@@ -51,12 +51,8 @@ public class Board {
         return board[i][j];
     }
 
-    public boolean isBoardFull() {
+    private boolean isBoardFull() {
         return totalMove == n*n;
-    }
-
-    public void printBoard (){
-
     }
 
 
