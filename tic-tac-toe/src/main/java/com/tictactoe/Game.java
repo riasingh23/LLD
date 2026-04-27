@@ -44,7 +44,7 @@ public class Game {
                 winner = currPlayer;
                 gameStatus = GameStatus.WIN;
                 break;
-            } else if (board.isBoardFull()) {
+            } else if (result.isDraw()) {
                 gameStatus = GameStatus.DRAW;
                 break;
             }

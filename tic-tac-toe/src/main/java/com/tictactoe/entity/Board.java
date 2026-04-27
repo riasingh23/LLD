@@ -33,7 +33,7 @@ public class Board {
 
     public MoveResult makeMove(Move move, Piece piece) {
         if(!validateMove(move)) {
-            return new MoveResult(false, false);
+            return new MoveResult(false, false, false);
         }
         int row = move.getRow();
         int col = move.getColumn();
@@ -41,8 +41,10 @@ public class Board {
         board[row][col] = piece;
         totalMove++;
         if(gameRuleEngine.updateMoveAndCheckWinner(move, piece))
-            return new MoveResult(true, true);
-        return new MoveResult(false, true);
+            return new MoveResult(true, true, false);
+        if(isBoardFull())
+            return new MoveResult(false, true, true);
+        return new MoveResult(false, true, false);
     }
 
     public Piece getPieceAtPosition(int i, int j){
