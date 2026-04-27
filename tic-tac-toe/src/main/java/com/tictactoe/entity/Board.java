@@ -44,8 +44,8 @@ public class Board {
         if(gameRuleEngine.updateMoveAndCheckWinner(move, piece))
             return new MoveResult(true, GameStatus.WIN);
         if(isBoardFull())
-            return new MoveResult(false, GameStatus.DRAW);
-        return new MoveResult(false, GameStatus.IN_PROGRESS);
+            return new MoveResult(true, GameStatus.DRAW);
+        return new MoveResult(true, GameStatus.IN_PROGRESS);
     }
 
     public Piece getPieceAtPosition(int i, int j){
