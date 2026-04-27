@@ -14,7 +14,6 @@ public class Game {
     private Player winner;
     private List<Move> moves;
     private GameObserverManager gameObserverManager;
-    private final Object lock = new Object();
     private TurnManager turnManager;
 
     public Game(List<Player> players, GameObserverManager gameObserverManager, int n) {
