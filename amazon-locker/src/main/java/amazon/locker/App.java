@@ -3,6 +3,8 @@ package amazon.locker;
 import amazon.locker.entities.AmazonLocker;
 import amazon.locker.entities.Compartment;
 import amazon.locker.enums.CompartmentSize;
+import amazon.locker.strategy.ExpirationStrategy;
+import amazon.locker.strategy.SizeBasedExpirationStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,9 @@ public class App
         compartments.add(medium);
         compartments.add(large);
 
-        AmazonLocker amazonLocker = new AmazonLocker(compartments);
+        ExpirationStrategy expirationStrategy = new SizeBasedExpirationStrategy();
+
+        AmazonLocker amazonLocker = new AmazonLocker(compartments, expirationStrategy);
 
         String codeSmall1 = amazonLocker.generateCodeAndPutPackage(CompartmentSize.SMALL);
         System.out.println("Your parcel is kept in locker succesfully you can access with code: " + codeSmall1);

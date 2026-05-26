@@ -1,16 +1,19 @@
 package amazon.locker;
 
 import amazon.locker.entities.Compartment;
-import java.util.UUID;
+import amazon.locker.enums.Location;
+import amazon.locker.strategy.ExpirationStrategy;
+
+import java.time.Instant;
 
 public class AccessToken {
-    private String code;
-    private long creationTime;
-    private Compartment compartment;
+    private final String code;
+    private final Instant creationAt;
+    private final Compartment compartment;
 
     public AccessToken(Compartment compartment, String code) {
         this.code = code;
-        this.creationTime = System.currentTimeMillis();
+        this.creationAt = Instant.now();
         this.compartment = compartment;
     }
 
@@ -22,7 +25,7 @@ public class AccessToken {
         return compartment;
     }
 
-    public boolean isExpired() {
-        return System.currentTimeMillis()-creationTime>(7*24*60*60*1000);
+    public boolean isExpired(ExpirationStrategy expirationStrategy, Location location) {
+        return Instant.now().isAfter(creationAt.plus(expirationStrategy.getexpirationDuration(compartment, location))) ;
     }
 }

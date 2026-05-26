@@ -21,7 +21,7 @@ public class Compartment {
         lock.lock();
         try {
             if(CompartmentState.OUT_OF_SERVICE.equals(compartmentState) || CompartmentState.OCCUPIED.equals(compartmentState)) return false;
-            compartmentState = CompartmentState.OUT_OF_SERVICE;
+            compartmentState = CompartmentState.OCCUPIED;
             return true;
         } finally {
             lock.unlock();
