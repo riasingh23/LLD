@@ -5,25 +5,25 @@ import amazon.locker.enums.CompartmentSize;
 import amazon.locker.exception.ExpiryCodeException;
 import amazon.locker.exception.InvalidCodeException;
 import amazon.locker.exception.NoAvailableCompartmentException;
-
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class AmazonLocker {
     private List<Compartment> compartments;
-    private Map<String, AccessToken> codeAccessTokenMapping;
+    private ConcurrentHashMap<String, AccessToken> codeAccessTokenMapping;
     private Set<String> usedCodes;
     private static final Logger logger = Logger.getLogger(AmazonLocker.class.getName());
 
     public AmazonLocker(List<Compartment> compartments) {
         this.compartments = compartments;
-        this.codeAccessTokenMapping = new HashMap<>();
-        this.usedCodes = new HashSet<>();
+        this.codeAccessTokenMapping = new ConcurrentHashMap<>();
+        this.usedCodes = ConcurrentHashMap.newKeySet();
     }
 
     public String generateCodeAndPutPackage(CompartmentSize size) {
         for(Compartment compartment : compartments) {
-            if(!compartment.isOccupied() && compartment.getSize().equals(size)){
+            if(compartment.getSize().equals(size)){
                 if(compartment.putPackage()) {
                     String code = UUID.randomUUID().toString();
                     // Check both previously used codes and currently active codes to guarantee uniqueness

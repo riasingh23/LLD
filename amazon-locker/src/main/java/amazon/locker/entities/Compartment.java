@@ -2,10 +2,13 @@ package amazon.locker.entities;
 
 import amazon.locker.enums.CompartmentSize;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Compartment {
     private String id;
     private CompartmentSize size;
     private boolean isOccupied;
+    private final ReentrantLock lock = new ReentrantLock();
 
     public Compartment(String id, CompartmentSize size) {
         this.id = id;
@@ -14,17 +17,26 @@ public class Compartment {
     }
 
     public boolean putPackage() {
-        if(isOccupied) return false;
-        isOccupied = true;
-        return true;
+        lock.lock();
+        try {
+            if(isOccupied) return false;
+            isOccupied = true;
+            return true;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public boolean removePackage() {
-        if(!isOccupied) return false;
-        isOccupied = false;
-        return true;
+        lock.lock();
+        try {
+            if(!isOccupied) return false;
+            isOccupied = false;
+            return true;
+        } finally {
+            lock.unlock();
+        }
     }
-
 
     public String getId() {
         return id;
@@ -32,9 +44,5 @@ public class Compartment {
 
     public CompartmentSize getSize() {
         return size;
-    }
-
-    public boolean isOccupied() {
-        return isOccupied;
     }
 }
