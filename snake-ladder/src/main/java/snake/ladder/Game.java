@@ -31,9 +31,10 @@ public class Game {
         int startPosition = player.getPosition();
         while(maxConsecutive>0) {
             int val = dice.roll();
-            if(player.getPosition()+val > board.getSize() || val != 6) break;
+            if(player.getPosition()+val > board.getSize()) break;
             totalSix++;
             player.setPosition(board.makeMove(player.getPosition()+val));
+            if(val != 6) break;
             checkWinner(player);
             maxConsecutive--;
         }

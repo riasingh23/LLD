@@ -5,18 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 public class Board {
-    private int[][] board;
+    private int size;
     private Map<Integer, BoardEntity> boardEntityMap = new HashMap<>();
 
-    public Board(int n, List<BoardEntity> boardEntityList) {
-        this.board = new int[n][n];
+    public Board(int size, List<BoardEntity> boardEntityList) {
+        this.size = size;
         for(BoardEntity boardEntity: boardEntityList) {
             boardEntityMap.put(boardEntity.getStart(), boardEntity);
         }
     }
 
     public int getSize() {
-        return board.length * board.length;
+        return size;
     }
 
     public int makeMove(int position){
