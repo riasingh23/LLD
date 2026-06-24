@@ -19,7 +19,7 @@ public class Game {
             Player currPlayer = players.poll();
             makeMove(currPlayer);
             if(GameStatus.IN_PROGRESS.equals(gameStatus))
-                players.add(currPlayer);
+                players.offer(currPlayer);
         }
     }
 
