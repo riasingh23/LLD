@@ -5,7 +5,6 @@ import snake.ladder.entity.Dice;
 import snake.ladder.entity.Player;
 import snake.ladder.enums.GameStatus;
 
-import java.util.List;
 import java.util.Queue;
 
 public class Game {
@@ -31,14 +30,14 @@ public class Game {
         while(maxConsecutive>0) {
             int val = dice.roll();
             if(player.getPosition()+val > board.getSize()) break;
-            player.setPosition(board.makeMove(player.getPosition()+val));
+            player.updatePosition(board.makeMove(player.getPosition()+val));
             checkWinner(player);
             if(val != 6) break;
             totalSix++;
             maxConsecutive--;
         }
         if(totalSix == 3) {
-            player.setPosition(startPosition);
+            player.updatePosition(startPosition);
         }
     }
 
