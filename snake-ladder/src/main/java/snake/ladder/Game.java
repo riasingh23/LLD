@@ -16,7 +16,6 @@ public class Game {
     private Player winner;
 
     public void play(){
-        if(players.size()<2) throw new IllegalArgumentException("Less players");
         while(GameStatus.IN_PROGRESS.equals(gameStatus)) {
             Player currPlayer = players.poll();
             makeMove(currPlayer);
@@ -32,10 +31,10 @@ public class Game {
         while(maxConsecutive>0) {
             int val = dice.roll();
             if(player.getPosition()+val > board.getSize()) break;
-            totalSix++;
             player.setPosition(board.makeMove(player.getPosition()+val));
-            if(val != 6) break;
             checkWinner(player);
+            if(val != 6) break;
+            totalSix++;
             maxConsecutive--;
         }
         if(totalSix == 3) {
@@ -58,7 +57,7 @@ public class Game {
         return winner;
     }
 
-    public Game(GameBuilder gameBuilder) {
+    private Game(GameBuilder gameBuilder) {
         this.dice = gameBuilder.dice;
         this.players = gameBuilder.players;
         this.board = gameBuilder.board;
@@ -88,6 +87,7 @@ public class Game {
 
         public Game build() {
             if(board == null || players == null || dice == null) throw new IllegalArgumentException("Board, Players, and Dice must be set.");
+            if(players.size()<2) throw new IllegalArgumentException("Less players");
             return new Game(this);
         }
 
