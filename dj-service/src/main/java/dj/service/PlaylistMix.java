@@ -25,10 +25,10 @@ public class PlaylistMix {
         return nextSong;
     }
 
-    public Queue<Song> mixPlaylist(UserPreference userPreference) {
+    public void mixPlaylist(UserPreference userPreference) {
         removePlayedSong();
-        removeNotPreferedSong(userPreference, djService.getSongList());
-        removeNotPreferedSong(userPreference, recommendationService.getSongList());
+        removeNotPreferredSong(userPreference, djService.getSongList());
+        removeNotPreferredSong(userPreference, recommendationService.getSongList());
         List<Song> songList = mixingStrategy.mixPlaylist(djService.getSongList(), recommendationService.getSongList());
         playlist.addAll(songList);
     }
